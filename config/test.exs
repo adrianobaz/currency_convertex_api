@@ -6,10 +6,10 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :currency_convertex_api, CurrencyConvertexApi.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "root",
+  password: "root",
   hostname: "localhost",
-  database: "currency_convertex_api_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "playground#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: 10
 
