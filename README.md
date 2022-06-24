@@ -21,26 +21,17 @@ or docker compose version
 ```bash
 docker-compose -v
 ```
-### **2. Spring boot app**
+### **2. Run dependencies**
 * Clone the repository:
 ```bash
-git clone https://github.com/adrianobaz/rest-currency-convert.git
+git clone https://github.com/adrianobaz/currency_convertex_api
 ```
-* Build the maven project:
-```bash
-./mvnw clean package -DskipTests
-```
+
 * Running the containers:
 
 This command will build the docker containers and start them.
 ```bash
-docker-compose up
-```
-or
-
-This is a similar command as above, except it will run all the processes in the background.
-```bash
-docker-compose -f docker-compose.yml up
+docker-compose up -d
 ```
 
 Appendix A.
