@@ -5,8 +5,10 @@ defmodule CurrencyConvertexApiWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", CurrencyConvertexApiWeb do
+  scope "/api/v1", CurrencyConvertexApiWeb do
     pipe_through :api
+
+    post "/conversion-transactions", ConversionTransactionsController, :create
   end
 
   # Enables LiveDashboard only for development
