@@ -28,3 +28,6 @@ currency_convertex_api-*.tar
 .idea
 .vscode
 
+# NOT TRACK ENVS!
+.env
+

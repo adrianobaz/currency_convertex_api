@@ -9,6 +9,8 @@ defmodule CurrencyConvertexApiWeb.Router do
     pipe_through :api
 
     post "/conversion-transactions", ConversionTransactionsController, :create
+
+    get "/conversion-transactions/:user_id", ConversionTransactionsController, :show
   end
 
   # Enables LiveDashboard only for development
