@@ -1,5 +1,7 @@
 defmodule CurrencyConvertexApi.ConversionTransaction.Create do
-  alias CurrencyConvertexApi.{ConversionTransaction, Repo, Error}
+  
+  alias CurrencyConvertexApi.{Repo, Error}
+  alias CurrencyConvertexApi.Schema.ConversionTransaction
 
   @moduledoc false
   def call(%{} = params) do

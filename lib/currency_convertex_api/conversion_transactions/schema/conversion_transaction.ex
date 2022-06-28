@@ -1,10 +1,9 @@
-defmodule CurrencyConvertexApi.ConversionTransaction do
+defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
   @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
 
-
-  @spec __struct__ :: %CurrencyConvertexApi.ConversionTransaction{
+  @spec __struct__ :: %CurrencyConvertexApi.Schema.ConversionTransaction{
           __meta__: Ecto.Schema.Metadata.t(),
           conversion_rate: nil,
           created_at: nil,
@@ -16,7 +15,7 @@ defmodule CurrencyConvertexApi.ConversionTransaction do
         }
   @doc """
 
-    %ConversionTransaction%{
+    %CurrencyConvertexApi.Schema.ConversionTransaction{
       user_id: 2,
       origin_currency: "EUR",
       origin_value: 38.89,
@@ -45,7 +44,7 @@ defmodule CurrencyConvertexApi.ConversionTransaction do
     :created_at
   ]
 
-  @derive {Jason.Encoder, only: @required_fields ++ [:id], except: [:__meta__]}
+  @derive {Jason.Encoder, only: @required_fields ++ [:id]}
 
   schema "conversion_transactions" do
     field :user_id, :integer

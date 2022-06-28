@@ -30,6 +30,10 @@ defmodule CurrencyConvertexApiWeb.ErrorView do
     %{destiny_currencys: error_message}
   end
 
+  def render("error.json", %{user_id: _error_message}) do
+    %{user_id: "Invalid format ID. Please, insert valid id"}
+  end
+
   def translate_errors(%Changeset{} = changeset) do
     traverse_errors(changeset, fn {msg, opts} ->
       Enum.reduce(opts, msg, fn {key, value}, acc ->
