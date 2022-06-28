@@ -27,4 +27,12 @@ defmodule CurrencyConvertexApiWeb.FallbackController do
     |> render("error.json", destiny_currencys: error_message)
     |> IO.inspect()
   end
+
+  def call(conn, {:error, %{user_id: error_message}}) do
+    conn
+    |> put_status(:bad_request)
+    |> put_view(ErrorView)
+    |> render("error.json", user_id: error_message)
+    |> IO.inspect()
+  end
 end

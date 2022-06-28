@@ -8,7 +8,10 @@ defmodule CurrencyConvertexApi do
   """
 
   alias CurrencyConvertexApi.ConversionTransaction.Generate, as: ConversionTransactionGenerate
+  alias CurrencyConvertexApi.ConversionTransaction.Get, as: ConversionTransactionGet
 
   defdelegate generate_conversion_transactions(params), to: ConversionTransactionGenerate, as: :call
+
+  defdelegate get_transactions_by(user_id), to: ConversionTransactionGet, as: :all_by
 
 end

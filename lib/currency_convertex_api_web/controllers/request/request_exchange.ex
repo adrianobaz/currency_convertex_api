@@ -1,7 +1,7 @@
 defmodule CurrencyConvertexApiWeb.RequestExchange do
+
   @spec __struct__ :: %CurrencyConvertexApiWeb.RequestExchange{
           destiny_currencys: nil,
-          id: nil,
           origin_currency: nil,
           origin_value: nil,
           user_id: nil
@@ -13,6 +13,8 @@ defmodule CurrencyConvertexApiWeb.RequestExchange do
   """
   use Ecto.Schema
   import Ecto.Changeset
+
+  @primary_key false
 
   @validators_param_array_strings %{
     destiny_currencys: [type: {:array, :string}, each: [length: [min: 3 ,max: 3], format: ~r/^[[:upper:]]+$/ ]]

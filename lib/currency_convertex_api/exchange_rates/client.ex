@@ -6,6 +6,8 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
   alias CurrencyConvertexApi.Error
   alias Tesla.Env
 
+  require Logger
+
   @doc """
 
   %{
@@ -18,9 +20,11 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
 
   """
 
+  @derive Jason.Encoder
+
   @base_url "http://api.exchangeratesapi.io/v1/latest"
   plug Tesla.Middleware.JSON
-  plug Tesla.Middleware.Query, [access_key: "b925c23ac599142ce5fdc632d57cba8c"]
+  plug Tesla.Middleware.Query, [access_key: System.get_env("ACCESS_KEY_EXCHANGE_RATES")]
 
   def get_exchange_rates(url \\ @base_url, symbols) do
     url
@@ -32,11 +36,10 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
     {:ok, body}
   end
 
-  defp handle_get({:ok, %Env{status: 400, body: _body}}) do
-    {:error, Error.build(:bad_request, "Invalid format for symbols!")}
-  end
-
-  defp handle_get({:error, reason}) do
-    {:error, Error.build(:bad_request, reason)}
+  defp handle_get({:ok, %Env{status: status, body: body}}) do
+    string_result = Jason.encode!(body)
+    message = "Status: #{status}. An error occur when request! Reason: " <> string_result
+    Logger.warn(message)
+    {:error, Error.build(status, message)}
   end
 end
