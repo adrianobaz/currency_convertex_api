@@ -7,10 +7,10 @@ defmodule CurrencyConvertexApi.Error do
 
   defstruct @keys
 
-  @spec build(atom() | String.t(), String.t() | Changeset.t()) ::
+  @spec build(atom() | String.t(), String.t() | Changeset.t() | map()) ::
           Struct.t(
-            result: String.t() | Changeset.t(),
-            status: atom()
+            result: String.t() | Changeset.t() | map(),
+            status: atom() | String.t()
           )
   @doc """
   Build error messages.
