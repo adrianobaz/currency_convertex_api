@@ -54,18 +54,13 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Generate do
     }
 
     with {:ok, %ConversionTransaction{} = conversion_transaction} <- create_conversion_transaction(conversion_transaction_params) do
-      destiny_value_with_precision = calculate_destiny_value(conversion_transaction.conversion_rate, conversion_transaction.origin_value)
+      destiny_value = Decimal.mult(conversion_transaction.conversion_rate, conversion_transaction.origin_value)
 
       conversion_transaction_params
       |> Map.put_new(:id, conversion_transaction.id)
-      |> Map.put_new(:destiny_value, destiny_value_with_precision)
-      |> IO.inspect()
+      |> Map.put_new(:destiny_value, destiny_value)
     end
   end
-
-  @spec calculate_destiny_value(binary | integer | Decimal.t(), binary | integer | Decimal.t()) ::
-          Decimal.t()
-  defp calculate_destiny_value(origin_value, exchange_rate), do: Decimal.mult(origin_value, exchange_rate)
 
   @spec convert_millis_to_date_time(integer) ::
           {:error, :incompatible_calendars | :invalid_unix_time} | {:ok, binary}

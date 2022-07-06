@@ -14,7 +14,7 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
           user_id: nil
         }
   @doc """
-
+  
     %CurrencyConvertexApi.Schema.ConversionTransaction{
       user_id: 2,
       origin_currency: "EUR",
@@ -23,7 +23,7 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
       conversion_rate: 1.056,
       created_at: ~U[2022-06-16 03:29:03Z]
     }
-
+  
   """
 
   @fields_that_can_be_changed [
@@ -62,6 +62,7 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
     |> validate_number(:user_id, greater_than: 0)
     |> validate_length(:origin_currency, is: 3)
     |> validate_length(:destiny_currency, is: 3)
+    |> validate_number(:conversion_rate, greater_than: 0)
     |> validate_number(:origin_value, greater_than: 0)
   end
 end

@@ -20,11 +20,9 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
 
   """
 
-  @derive Jason.Encoder
-
   @base_url "http://api.exchangeratesapi.io/v1/latest"
   plug Tesla.Middleware.JSON
-  plug Tesla.Middleware.Query, [access_key: System.get_env("ACCESS_KEY_EXCHANGE_RATES")]
+  plug Tesla.Middleware.Query, [access_key: System.get_env("ACCESS_KEY_EXCHANGE_RATES", "key_test")]
 
   def get_exchange_rates(url \\ @base_url, symbols) do
     url
@@ -37,9 +35,8 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
   end
 
   defp handle_get({:ok, %Env{status: status, body: body}}) do
-    string_result = Jason.encode!(body)
-    message = "Status: #{status}. An error occur when request! Reason: " <> string_result
+    message = "Status: #{status}. An error occur when request! Reason: " <> Jason.encode!(body)
     Logger.warn(message)
-    {:error, Error.build(status, message)}
+    {:error, Error.build(status, body)}
   end
 end

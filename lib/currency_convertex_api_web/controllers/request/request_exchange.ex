@@ -17,7 +17,7 @@ defmodule CurrencyConvertexApiWeb.RequestExchange do
   @primary_key false
 
   @validators_param_array_strings %{
-    destiny_currencys: [type: {:array, :string}, each: [length: [min: 3 ,max: 3], format: ~r/^[[:upper:]]+$/ ]]
+    destiny_currencys: [type: {:array, :string}, each: [length: [min: 3, max: 3], format: ~r/^[[:upper:]]+$/]]
   }
 
   embedded_schema do
