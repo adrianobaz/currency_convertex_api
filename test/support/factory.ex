@@ -25,7 +25,6 @@ defmodule CurrencyConvertexApi.Factory do
 
   def conversion_transaction_factory do
     %ConversionTransaction{
-      id: 1,
       user_id: 2,
       origin_currency: "EUR",
       origin_value: 38.89,
@@ -42,11 +41,10 @@ defmodule CurrencyConvertexApi.Factory do
       "base" => "EUR",
       "date" => "2022-06-24",
       "rates" => %{
-          "BRL" => 5.517014,
-          "JPY" => 141.955699,
-          "USD" => 1.052986
+        "BRL" => 5.517014,
+        "JPY" => 141.955699,
+        "USD" => 1.052986
       }
     }
   end
-
 end

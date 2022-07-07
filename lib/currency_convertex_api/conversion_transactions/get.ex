@@ -11,6 +11,7 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Get do
     result =
       from(ct in ConversionTransaction, where: ct.user_id == ^user_id)
       |> Repo.all()
+
     {:ok, result}
   end
 end
