@@ -8,17 +8,19 @@ defmodule CurrencyConvertexApiWeb.ConversionTransactionsController do
 
   action_fallback FallbackController
 
-  @validator_id %{ user_id: [type: :string, into: &String.to_integer/1, format: ~r/^[[:digit:]]+$/ ] }
+  @validator_id %{
+    user_id: [type: :string, into: &String.to_integer/1, format: ~r/^[[:digit:]]+$/]
+  }
 
   def create(conn, params) do
     with {:ok, changes} <- RequestExchange.validate_params(params),
          :ok <- RequestExchange.validate_format_destiny_currencys(changes),
          {:ok, result} <- CurrencyConvertexApi.generate_conversion_transactions(changes) do
-        conn
-        |> put_status(:created)
-        |> render("create.json", result: result)
-        |> IO.inspect()
-      end
+      conn
+      |> put_status(:created)
+      |> render("create.json", result: result)
+      |> IO.inspect()
+    end
   end
 
   def show(conn, %{"user_id" => _} = param) do

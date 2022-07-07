@@ -1,5 +1,4 @@
 defmodule CurrencyConvertexApi.ConversionTransaction.Create do
-  
   alias CurrencyConvertexApi.{Repo, Error}
   alias CurrencyConvertexApi.Schema.ConversionTransaction
 
@@ -10,8 +9,6 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Create do
     |> Repo.insert()
     |> handle_insert()
   end
-
-  def call(_anything), do: "Enter the data in a map format"
 
   defp handle_insert({:ok, %ConversionTransaction{}} = result), do: result
 

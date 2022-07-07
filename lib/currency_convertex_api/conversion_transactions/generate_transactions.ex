@@ -20,26 +20,30 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Generate do
           | {:ok, list()}
   def call(%{user_id: user_id, origin_value: origin_value, destiny_currencys: destiny_currencys}) do
     string_symbols = Enum.join(destiny_currencys, ",")
-    with {:ok, %{"timestamp" => timestamp, "base" => base, "rates" => rates}} <- Client.get_exchange_rates(string_symbols),
-         {:ok, date_time} <- convert_millis_to_date_time(timestamp) do
 
-          result =
-            rates
-            |> Stream.map(fn {currency, exchange_rate} -> do_insert(
-              user_id,
-              base,
-              origin_value,
-              currency,
-              exchange_rate,
-              date_time)
-            end)
-            |> Enum.to_list()
-          {:ok, result}
+    with {:ok, %{"timestamp" => timestamp, "base" => base, "rates" => rates}} <-
+           Client.get_exchange_rates(string_symbols),
+         {:ok, date_time} <- convert_millis_to_date_time(timestamp) do
+      result =
+        rates
+        |> Stream.map(fn {currency, exchange_rate} ->
+          do_insert(
+            user_id,
+            base,
+            origin_value,
+            currency,
+            exchange_rate,
+            date_time
+          )
+        end)
+        |> Enum.to_list()
+
+      {:ok, result}
     end
   end
 
-  @spec do_insert(integer, String.t(), Decimal.t(), String.t(), float, String.t()) ::
-          <<_::240>> | {:error, %CurrencyConvertexApi.Error{result: any, status: any}} | map
+  @spec do_insert(integer(), String.t(), Decimal.t(), String.t(), float(), String.t()) ::
+          {:error, %CurrencyConvertexApi.Error{result: any, status: any}} | map
   defp do_insert(user_id, base, origin_value, currency, exchange_rate, date_time) do
     exchange_rate_with_precision = format_value_with_precision(exchange_rate)
     origin_value_with_precision = Decimal.round(origin_value, 2)
@@ -53,8 +57,10 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Generate do
       created_at: date_time
     }
 
-    with {:ok, %ConversionTransaction{} = conversion_transaction} <- create_conversion_transaction(conversion_transaction_params) do
-      destiny_value = Decimal.mult(conversion_transaction.conversion_rate, conversion_transaction.origin_value)
+    with {:ok, %ConversionTransaction{} = conversion_transaction} <-
+           create_conversion_transaction(conversion_transaction_params) do
+      destiny_value =
+        Decimal.mult(conversion_transaction.conversion_rate, conversion_transaction.origin_value)
 
       conversion_transaction_params
       |> Map.put_new(:id, conversion_transaction.id)

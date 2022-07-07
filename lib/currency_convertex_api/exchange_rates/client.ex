@@ -9,7 +9,7 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
   require Logger
 
   @doc """
-
+  
   %{
       "base" => "EUR",
       "date" => "2022-06-16",
@@ -17,12 +17,12 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
       "success" => true,
       "timestamp" => 1655350143
   }
-
+  
   """
 
   @base_url "http://api.exchangeratesapi.io/v1/latest"
   plug Tesla.Middleware.JSON
-  plug Tesla.Middleware.Query, [access_key: System.get_env("ACCESS_KEY_EXCHANGE_RATES", "key_test")]
+  plug Tesla.Middleware.Query, access_key: System.get_env("ACCESS_KEY_EXCHANGE_RATES", "key_test")
 
   def get_exchange_rates(url \\ @base_url, symbols) do
     url
