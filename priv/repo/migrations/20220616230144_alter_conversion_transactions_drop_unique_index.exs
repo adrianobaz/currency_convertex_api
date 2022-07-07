@@ -4,5 +4,4 @@ defmodule CurrencyConvertexApi.Repo.Migrations.AlterConversionTransactionsDropUn
   def change do
     drop index(:conversion_transactions, [:user_id]), mode: :cascade
   end
-  
 end

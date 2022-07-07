@@ -11,9 +11,9 @@ config :currency_convertex_api,
   ecto_repos: [CurrencyConvertexApi.Repo]
 
 config :currency_convertex_api, CurrencyConvertexApi.Repo,
-   migration_timestamps: [
-     type: :utc_datetime
-   ]
+  migration_timestamps: [
+    type: :utc_datetime
+  ]
 
 # Configures the endpoint
 config :currency_convertex_api, CurrencyConvertexApiWeb.Endpoint,

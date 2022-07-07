@@ -2,12 +2,12 @@ defmodule CurrencyConvertexApi.Repo.Migrations.CreateConversionTransactionsTable
   use Ecto.Migration
 
   def change do
-    create table :conversion_transactions do
-      add :user_id,           :integer
-      add :origin_currency,   :string,  size: 5
-      add :origin_value,      :decimal
-      add :destiny_currency,  :string,  size: 5
-      add :conversion_rate,   :decimal
+    create table(:conversion_transactions) do
+      add :user_id, :integer
+      add :origin_currency, :string, size: 5
+      add :origin_value, :decimal
+      add :destiny_currency, :string, size: 5
+      add :conversion_rate, :decimal
 
       timestamps(inserted_at: :created_at, updated_at: false)
     end
