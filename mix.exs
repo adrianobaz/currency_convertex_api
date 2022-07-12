@@ -56,7 +56,7 @@ defmodule CurrencyConvertexApi.MixProject do
       {:excoveralls, "~> 0.14.5", only: :test},
       {:tesla, "~> 1.4.4"},
       {:hackney, "~> 1.18.0"},
-      {:mox, "~> 1.0.2", only: :test},
+      {:mimic, "~> 1.7", only: :test},
       {:bypass, "~> 2.1", only: :test},
       {:tarams, "~> 1.6.1"}
     ]

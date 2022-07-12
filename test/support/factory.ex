@@ -5,10 +5,9 @@ defmodule CurrencyConvertexApi.Factory do
 
   def request_exchange_params_factory do
     %{
-      "destiny_currencys" => ["USD", "BRL", "JPY"],
-      "origin_currency" => "EUR",
-      "origin_value" => 38.89,
-      "user_id" => 2
+      user_id: 2,
+      origin_value: Decimal.new("48.674545"),
+      destiny_currencys: ["USD", "BRL", "JPY"]
     }
   end
 
@@ -16,9 +15,9 @@ defmodule CurrencyConvertexApi.Factory do
     %{
       user_id: 2,
       origin_currency: "EUR",
-      origin_value: 38.89,
+      origin_value: Decimal.new("38.89"),
       destiny_currency: "USD",
-      conversion_rate: 1.056,
+      conversion_rate: Decimal.new("1.06"),
       created_at: "2022-06-24T02:09:06Z"
     }
   end
@@ -27,9 +26,9 @@ defmodule CurrencyConvertexApi.Factory do
     %ConversionTransaction{
       user_id: 2,
       origin_currency: "EUR",
-      origin_value: 38.89,
+      origin_value: Decimal.new("38.89"),
       destiny_currency: "USD",
-      conversion_rate: 1.056,
+      conversion_rate: Decimal.new("1.06"),
       created_at: ~U[2022-06-16 03:29:03Z]
     }
   end

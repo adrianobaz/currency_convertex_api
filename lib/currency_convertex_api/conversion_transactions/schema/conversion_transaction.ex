@@ -14,7 +14,6 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
           user_id: nil
         }
   @doc """
-  
     %CurrencyConvertexApi.Schema.ConversionTransaction{
       user_id: 2,
       origin_currency: "EUR",
@@ -23,7 +22,6 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
       conversion_rate: 1.056,
       created_at: ~U[2022-06-16 03:29:03Z]
     }
-  
   """
 
   @fields_that_can_be_changed [

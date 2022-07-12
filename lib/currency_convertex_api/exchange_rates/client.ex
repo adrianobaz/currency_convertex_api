@@ -9,7 +9,6 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
   require Logger
 
   @doc """
-  
   %{
       "base" => "EUR",
       "date" => "2022-06-16",
@@ -17,7 +16,6 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
       "success" => true,
       "timestamp" => 1655350143
   }
-  
   """
 
   @base_url "http://api.exchangeratesapi.io/v1/latest"
