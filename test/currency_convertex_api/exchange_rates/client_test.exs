@@ -36,20 +36,21 @@ defmodule CurrencyConvertexApi.ExchangeRates.ClientTest do
           %Env{status: 400, body: response_fail}
       end)
 
-      [response_success: response_success, response_fail: response_fail]
+      %{response_success: response_success, response_fail: response_fail}
     end
 
-    test "when all requeriments for the request to be executed successfully", context do
+    test "when all requeriments for the request to be executed successfully", %{
+      response_success: response_success
+    } do
       symbols = "BRL,JPY,USD"
       assert {:ok, body} = Client.get_exchange_rates(symbols)
-      assert body == context[:response_success]
+      assert body == response_success
     end
 
-    test "when the are some error to execute a request", context do
+    test "when there are some error to execute a request", %{response_fail: response_fail} do
       symbols = "PPP,AAA"
-      assert {:error, %Error{status: status, result: result}} = Client.get_exchange_rates(symbols)
-      assert status == 400
-      assert result == context[:response_fail]
+      assert {:error, %Error{status: 400, result: result}} = Client.get_exchange_rates(symbols)
+      assert result == response_fail
     end
   end
 end

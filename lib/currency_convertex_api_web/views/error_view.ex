@@ -23,15 +23,11 @@ defmodule CurrencyConvertexApiWeb.ErrorView do
   end
 
   def render("error.json", %{result: error_message}) do
-    %{massage: error_message}
+    %{message: error_message}
   end
 
   def render("error.json", %{destiny_currencys: error_message}) do
     %{destiny_currencys: error_message}
-  end
-
-  def render("error.json", %{user_id: _error_message}) do
-    %{user_id: "Invalid format ID. Please, insert valid id"}
   end
 
   def translate_errors(%Changeset{} = changeset) do

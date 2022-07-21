@@ -2,16 +2,15 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Get do
   @moduledoc false
 
   alias CurrencyConvertexApi.Repo
-  alias CurrencyConvertexApi.Schema.ConversionTransaction
+  alias CurrencyConvertexApi.ConversionTransaction
 
   import Ecto.Query
 
-  @spec all_by(integer()) :: {:ok, list()}
-  def all_by(user_id) do
+  @spec all_by(binary()) :: {:ok, list()}
+  def all_by(user_id) when is_binary(user_id) do
     result =
-      (ct in ConversionTransaction)
-      |> from()
-      |> where([ct], ct.user_id == ^user_id)
+      ConversionTransaction
+      |> where(user_id: ^user_id)
       |> Repo.all()
 
     {:ok, result}

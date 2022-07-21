@@ -15,6 +15,16 @@ config :currency_convertex_api, CurrencyConvertexApi.Repo,
     type: :utc_datetime
   ]
 
+# Auth
+config :currency_convertex_api, CurrencyConvertexApiWeb.Auth.Guardian,
+  issuer: "currency_convertex_api",
+  secret_key: "qQmvemACVfNgpAvdJ+moCdl5VNO7OeS4EWpb/Xo5lOXKQtTmN7HYCl2DoXzcwPGc"
+
+# Auth Pipeline
+config :currency_convertex_api, CurrencyConvertexApiWeb.Auth.Pipeline,
+  module: CurrencyConvertexApiWeb.Auth.Guardian,
+  error_handler: CurrencyConvertexApiWeb.Auth.ErrorHandler
+
 # Configures the endpoint
 config :currency_convertex_api, CurrencyConvertexApiWeb.Endpoint,
   url: [host: "localhost"],

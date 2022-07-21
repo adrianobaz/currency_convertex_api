@@ -51,14 +51,34 @@ defmodule CurrencyConvertexApi.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+
+      # Code quality
       {:credo, "~> 1.6.0", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.7.0"},
       {:excoveralls, "~> 0.14.5", only: :test},
+      {:mimic, "~> 1.7", only: :test},
+      {:sobelow, "~> 0.8", only: :dev},
+
+      # Others
       {:tesla, "~> 1.4.4"},
       {:hackney, "~> 1.18.0"},
-      {:mimic, "~> 1.7", only: :test},
-      {:bypass, "~> 2.1", only: :test},
-      {:tarams, "~> 1.6.1"}
+      {:tarams, "~> 1.6.1"},
+      {:argon2_elixir, "~> 3.0"},
+      {:guardian, "~> 2.2.4"}
+
+      # {:exvcr, "~> 0.12.2", only: :test},
+      # {:dialyxir, "~> 1.0", only: :dev, runtime: false},
+      # {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
+      # {:husky, "~> 1.0", only: :dev, runtime: false},
+      # {:benchee, "~> 1.0", only: :dev},
+      # {:espec_phoenix, "~> 0.8.2", only: :test},
+
+      # {:ex_crypto, "~> 0.10.0"},
+      # {:latinizer, "~> 0.4.0"},
+      # {:oban, "~> 2.8"},
+      # {:tzdata, "~> 1.1"},
+      # {:brcpfcnpj, "~> 1.0.0"}
+      # {:appsignal, "~> 2.2", override: true}
     ]
   end
 

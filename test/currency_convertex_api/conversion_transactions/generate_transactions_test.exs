@@ -9,8 +9,18 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
   alias CurrencyConvertexApi.Error
 
   describe "call/1" do
-    test "when there are valid params, return with success conversion transactions list" do
-      params = build(:request_exchange_params)
+    setup do
+      %{id: user_id} = insert(:user)
+
+      %{user_id: user_id}
+    end
+
+    test "when there are valid params, return with success conversion transactions list", %{
+      user_id: user_id
+    } do
+      list_string = ~w(BRL JPY USD)
+
+      params = build(:request_exchange_params, %{user_id: user_id})
 
       expect(Client, :get_exchange_rates, fn symbols_string ->
         assert symbols_string == "USD,BRL,JPY"
@@ -19,17 +29,34 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
 
       assert {:ok, [h | t]} = Generate.call(params)
 
-      list_indexed = Enum.with_index([h] ++ t)
+      ([h] ++ t)
+      |> Enum.zip(list_string)
+      |> Enum.each(fn {conversion_transaction, symbol} ->
+        %{
+          user_id: user_id,
+          origin_currency: origin_currency,
+          destiny_currency: destiny_currency
+        } = conversion_transaction
 
-      list_indexed
-      |> Enum.each(fn {conversion_transaction, index} ->
-        {value, _} = List.keyfind(list_indexed, index, 1)
-        assert value == conversion_transaction
+        assert user_id == user_id
+        assert origin_currency == "EUR"
+        assert destiny_currency == symbol
       end)
     end
 
-    test "when there are invalid arguments, return error with bad request" do
-      params = build(:request_exchange_params, destiny_currencys: ["USD", "bBb", "JJJ"])
+    test "when there is passed user id that NOT exists, return not found" do
+      params = build(:request_exchange_params)
+
+      assert {:error, %Error{status: :not_found, result: result}} = Generate.call(params)
+      assert result == "User not found!"
+    end
+
+    test "when there are invalid arguments, return error with bad request", %{user_id: user_id} do
+      params =
+        build(:request_exchange_params, %{
+          user_id: user_id,
+          destiny_currencys: ["USD", "bBb", "JJJ"]
+        })
 
       result = %{
         "error" => %{
@@ -44,13 +71,12 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
         {:error, %Error{status: 400, result: result}}
       end)
 
-      assert {:error, %Error{status: status, result: response}} = Generate.call(params)
+      assert {:error, %Error{status: 400, result: response}} = Generate.call(params)
       assert result == response
-      assert status == 400
     end
 
-    test "when timestamp argument is invalid, return an error" do
-      params = build(:request_exchange_params)
+    test "when timestamp argument is invalid, return an error", %{user_id: user_id} do
+      params = build(:request_exchange_params, %{user_id: user_id})
 
       expect(Client, :get_exchange_rates, fn symbols_string ->
         assert symbols_string == "USD,BRL,JPY"

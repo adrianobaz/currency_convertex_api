@@ -1,24 +1,25 @@
 defmodule CurrencyConvertexApi.ConversionTransaction.Generate do
   @moduledoc false
 
-  alias CurrencyConvertexApi.ConversionTransaction.Create
+  alias CurrencyConvertexApi.ConversionTransaction
   alias CurrencyConvertexApi.ExchangeRates.Client
-  alias CurrencyConvertexApi.Schema.ConversionTransaction
+  alias CurrencyConvertexApi.ConversionTransaction
 
   @spec call(%{
           :destiny_currencys => list(String.t()),
           :origin_value => Decimal.t(),
-          :user_id => integer()
+          :user_id => binary()
         }) ::
           {:error,
            :incompatible_calendars
            | :invalid_unix_time
-           | %CurrencyConvertexApi.Error{result: any, status: any}}
+           | CurrencyConvertexApi.Error.t()}
           | {:ok, list()}
   def call(%{user_id: user_id, origin_value: origin_value, destiny_currencys: destiny_currencys}) do
     string_symbols = Enum.join(destiny_currencys, ",")
 
-    with {:ok, %{"timestamp" => timestamp, "base" => base, "rates" => rates}} <-
+    with {:ok, _} <- CurrencyConvertexApi.get_user_by_id(user_id),
+         {:ok, %{"timestamp" => timestamp, "base" => base, "rates" => rates}} <-
            Client.get_exchange_rates(string_symbols),
          {:ok, date_time} <- convert_millis_to_date_time(timestamp) do
       result =
@@ -39,8 +40,8 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Generate do
     end
   end
 
-  @spec do_insert(integer(), String.t(), number, String.t(), number, any) ::
-          {:error, %CurrencyConvertexApi.Error{result: any, status: any}} | map
+  @spec do_insert(binary(), String.t(), number, String.t(), number, any) ::
+          {:error, CurrencyConvertexApi.Error.t()} | map
   defp do_insert(user_id, base, origin_value, currency, exchange_rate, date_time) do
     exchange_rate_with_precision = format_value_with_precision(exchange_rate)
     origin_value_with_precision = Decimal.round(origin_value, 2)
@@ -55,7 +56,7 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Generate do
     }
 
     with {:ok, %ConversionTransaction{} = conversion_transaction} <-
-           Create.call(conversion_transaction_params) do
+           ConversionTransaction.Create.call(conversion_transaction_params) do
       destiny_value =
         conversion_transaction.conversion_rate
         |> Decimal.mult(conversion_transaction.origin_value)
