@@ -1,46 +1,60 @@
-defmodule CurrencyConvertexApi.Schema.ConversionTransactionTest do
+defmodule CurrencyConvertexApi.ConversionTransactionTest do
   use CurrencyConvertexApi.DataCase, async: true
 
   import CurrencyConvertexApi.Factory
 
   alias Ecto.Changeset
-  alias CurrencyConvertexApi.Schema.ConversionTransaction
+  alias CurrencyConvertexApi.ConversionTransaction
 
   describe "changeset/2" do
     setup do
-      params = build(:conversion_transaction_params)
-      invalid_params = build(:conversion_transaction_params, %{user_id: 0, origin_value: 0})
-      [params: params, invalid_params: invalid_params]
+      %{id: user_id} = insert(:user)
+
+      params = build(:conversion_transaction_params, %{user_id: user_id})
+
+      invalid_params =
+        build(:conversion_transaction_params, %{destiny_currency: "ABCD", origin_value: 0})
+
+      %{params: params, invalid_params: invalid_params}
     end
 
-    test "when all params are valid, returns a valid changeset", context do
-      response = ConversionTransaction.changeset(context[:params])
+    test "when all params are valid, returns a valid changeset", %{params: params} do
+      %{user_id: user_id} = params
+      response = ConversionTransaction.changeset(params)
 
       assert %Changeset{
-               changes: %{user_id: 2, origin_currency: "EUR", destiny_currency: "USD"},
+               changes: %{
+                 user_id: ^user_id,
+                 origin_currency: "EUR",
+                 destiny_currency: "USD"
+               },
                valid?: true
              } = response
     end
 
+    test "when there are some error, returns an invalid changeset", %{
+      invalid_params: invalid_params
+    } do
+      changeset = ConversionTransaction.changeset(invalid_params)
+
+      expected_response = %{
+        user_id: ["can't be blank"],
+        destiny_currency: ["should be 3 character(s)"],
+        origin_value: ["must be greater than 0"]
+      }
+
+      refute changeset.valid?
+      assert errors_on(changeset) == expected_response
+    end
+
     Enum.each([:user_id, :origin_currency, :destiny_currency, :conversion_rate], fn field ->
       test "when there are some error, returns an invalid changeset if #{field} was missing",
-           context do
+           %{params: params} do
         assert %Changeset{valid?: false} =
-                 context[:params]
+                 params
                  |> Map.drop([unquote(field)])
                  |> ConversionTransaction.changeset()
       end
     end)
-
-    test "when there are some error, returns an invalid changeset", context do
-      response = ConversionTransaction.changeset(context[:invalid_params])
-
-      expected_response = %{
-        user_id: ["must be greater than 0"],
-        origin_value: ["must be greater than 0"]
-      }
-
-      assert errors_on(response) == expected_response
-    end
   end
 end

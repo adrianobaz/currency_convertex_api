@@ -1,28 +1,7 @@
-defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
-  @moduledoc false
+defmodule CurrencyConvertexApi.ConversionTransaction do
   use Ecto.Schema
   import Ecto.Changeset
-
-  @spec __struct__ :: %CurrencyConvertexApi.Schema.ConversionTransaction{
-          __meta__: Ecto.Schema.Metadata.t(),
-          conversion_rate: nil,
-          created_at: nil,
-          destiny_currency: nil,
-          id: nil,
-          origin_currency: nil,
-          origin_value: nil,
-          user_id: nil
-        }
-  @doc """
-    %CurrencyConvertexApi.Schema.ConversionTransaction{
-      user_id: 2,
-      origin_currency: "EUR",
-      origin_value: 38.89,
-      destiny_currency: "USD",
-      conversion_rate: 1.056,
-      created_at: ~U[2022-06-16 03:29:03Z]
-    }
-  """
+  alias CurrencyConvertexApi.User
 
   @fields_that_can_be_changed [
     :user_id,
@@ -44,20 +23,25 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransaction do
 
   @derive {Jason.Encoder, only: @required_fields ++ [:id]}
 
+  @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
+
   schema "conversion_transactions" do
-    field :user_id, :integer
     field :origin_currency, :string
     field :origin_value, :decimal
     field :destiny_currency, :string
     field :conversion_rate, :decimal
     field :created_at, :utc_datetime
+
+    belongs_to :user, User
   end
+
+  def build(changeset), do: apply_action(changeset, :insert)
 
   def changeset(struct \\ %__MODULE__{}, %{} = params, fields \\ @required_fields) do
     struct
     |> cast(params, @fields_that_can_be_changed)
     |> validate_required(fields)
-    |> validate_number(:user_id, greater_than: 0)
     |> validate_length(:origin_currency, is: 3)
     |> validate_length(:destiny_currency, is: 3)
     |> validate_number(:conversion_rate, greater_than: 0)

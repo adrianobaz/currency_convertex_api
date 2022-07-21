@@ -7,7 +7,9 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GetTest do
 
   describe "all_by/1" do
     setup do
-      result = insert_list(3, :conversion_transaction)
+      %{id: user_id} = insert(:user)
+
+      result = insert_list(3, :conversion_transaction, %{user_id: user_id})
 
       %{result: result}
     end
@@ -20,10 +22,8 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GetTest do
       assert {:ok, ^result} = Get.all_by(user_id)
     end
 
-    test "when user id is invalid, returns empty list", %{result: result} do
-      [%{user_id: user_id} | _t] = result
-
-      user_id_invalid = user_id + 1
+    test "when user id is invalid, returns empty list" do
+      user_id_invalid = Ecto.UUID.generate()
 
       assert {:ok, []} = Get.all_by(user_id_invalid)
     end

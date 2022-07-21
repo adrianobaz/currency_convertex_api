@@ -7,14 +7,17 @@ defmodule CurrencyConvertexApi.Error do
 
   defstruct @keys
 
+  @moduledoc false
+
+  @doc """
+  Build error messages
+  """
+
   @spec build(atom() | String.t(), String.t() | Changeset.t() | map()) ::
           Struct.t(
             result: String.t() | Changeset.t() | map(),
             status: atom() | String.t()
           )
-  @doc """
-  Build error messages
-  """
   def build(status, result) do
     %__MODULE__{
       result: result,

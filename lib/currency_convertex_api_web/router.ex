@@ -3,14 +3,33 @@ defmodule CurrencyConvertexApiWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug CurrencyConvertexApiWeb.Plugs.UuidChecker
+  end
+
+  pipeline :auth do
+    plug CurrencyConvertexApiWeb.Auth.Pipeline
+  end
+
+  pipeline :ensure_auth do
+    plug Guardian.Plug.EnsureAuthenticated
   end
 
   scope "/api/v1", CurrencyConvertexApiWeb do
-    pipe_through :api
+    pipe_through [:api, :auth, :ensure_auth]
 
     post "/conversion-transactions", ConversionTransactionsController, :create
 
     get "/conversion-transactions/:user_id", ConversionTransactionsController, :show
+
+    get "/users/:id", UsersController, :show
+  end
+
+  scope "/api/v1", CurrencyConvertexApiWeb do
+    pipe_through [:api, :auth]
+
+    post "/users", UsersController, :create
+
+    post "/signin", UsersController, :sign_in
   end
 
   # Enables LiveDashboard only for development

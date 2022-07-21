@@ -25,16 +25,16 @@ defmodule CurrencyConvertexApi.ExchangeRates.Client do
   def get_exchange_rates(url \\ @base_url, symbols) do
     url
     |> get(query: [symbols: symbols])
-    |> handle_get()
-  end
+    |> case do
+      {:ok, %Env{status: 200, body: body}} ->
+        {:ok, body}
 
-  defp handle_get({:ok, %Env{status: 200, body: body}}) do
-    {:ok, body}
-  end
+      {:ok, %Env{status: status, body: body}} ->
+        message =
+          "Status: #{status}. An error occur when request! Reason:  #{Jason.encode!(body)}"
 
-  defp handle_get({:ok, %Env{status: status, body: body}}) do
-    message = "Status: #{status}. An error occur when request! Reason: " <> Jason.encode!(body)
-    Logger.warn(message)
-    {:error, Error.build(status, body)}
+        Logger.warn(message)
+        {:error, Error.build(status, body)}
+    end
   end
 end

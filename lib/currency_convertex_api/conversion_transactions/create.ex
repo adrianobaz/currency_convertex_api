@@ -1,6 +1,6 @@
 defmodule CurrencyConvertexApi.ConversionTransaction.Create do
   alias CurrencyConvertexApi.{Repo, Error}
-  alias CurrencyConvertexApi.Schema.ConversionTransaction
+  alias CurrencyConvertexApi.ConversionTransaction
 
   @moduledoc false
 
@@ -8,12 +8,9 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Create do
     params
     |> ConversionTransaction.changeset()
     |> Repo.insert()
-    |> handle_insert()
-  end
-
-  defp handle_insert({:ok, %ConversionTransaction{}} = result), do: result
-
-  defp handle_insert({:error, changeset}) do
-    {:error, Error.build(:bad_request, changeset)}
+    |> case do
+      {:ok, %ConversionTransaction{}} = result -> result
+      {:error, changeset} -> {:error, Error.build(:bad_request, changeset)}
+    end
   end
 end
