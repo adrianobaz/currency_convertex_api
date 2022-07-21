@@ -13,7 +13,7 @@ defmodule CurrencyConvertexApi.Error do
             status: atom() | String.t()
           )
   @doc """
-  Build error messages.
+  Build error messages
   """
   def build(status, result) do
     %__MODULE__{

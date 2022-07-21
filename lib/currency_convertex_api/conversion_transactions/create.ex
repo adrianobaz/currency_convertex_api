@@ -3,6 +3,7 @@ defmodule CurrencyConvertexApi.ConversionTransaction.Create do
   alias CurrencyConvertexApi.Schema.ConversionTransaction
 
   @moduledoc false
+
   def call(%{} = params) do
     params
     |> ConversionTransaction.changeset()

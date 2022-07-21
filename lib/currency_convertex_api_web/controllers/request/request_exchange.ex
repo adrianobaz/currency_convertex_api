@@ -6,9 +6,9 @@ defmodule CurrencyConvertexApiWeb.RequestExchange do
           user_id: nil
         }
   @doc """
-  
+
     params = %{ destiny_currencys: ["USD", "BRL", "JPY"], origin_currency: "EUR", origin_value: 38.89, user_id: 2 }
-  
+
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -29,10 +29,10 @@ defmodule CurrencyConvertexApiWeb.RequestExchange do
     field :destiny_currencys, {:array, :string}
   end
 
-  defp changeset(%{} = attrs) do
-    %__MODULE__{}
-    |> cast(attrs, [:user_id, :origin_currency, :origin_value, :destiny_currencys])
-    |> validate_required([:user_id, :origin_currency, :origin_value, :destiny_currencys])
+  defp changeset(struct \\ %__MODULE__{}, %{} = params) do
+    struct
+    |> cast(params, [:user_id, :origin_currency, :origin_value, :destiny_currencys])
+    |> validate_required([:user_id, :origin_value, :destiny_currencys])
     |> validate_number(:user_id, greater_than: 0)
     |> validate_length(:origin_currency, is: 3)
     |> validate_format(:origin_currency, ~r/^[[:alpha:]]+$/)

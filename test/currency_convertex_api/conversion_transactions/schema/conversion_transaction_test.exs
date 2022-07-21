@@ -22,7 +22,7 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransactionTest do
              } = response
     end
 
-    for field <- [:user_id, :origin_currency, :destiny_currency, :conversion_rate] do
+    Enum.each([:user_id, :origin_currency, :destiny_currency, :conversion_rate], fn field ->
       test "when there are some error, returns an invalid changeset if #{field} was missing",
            context do
         assert %Changeset{valid?: false} =
@@ -30,7 +30,7 @@ defmodule CurrencyConvertexApi.Schema.ConversionTransactionTest do
                  |> Map.drop([unquote(field)])
                  |> ConversionTransaction.changeset()
       end
-    end
+    end)
 
     test "when there are some error, returns an invalid changeset", context do
       response = ConversionTransaction.changeset(context[:invalid_params])

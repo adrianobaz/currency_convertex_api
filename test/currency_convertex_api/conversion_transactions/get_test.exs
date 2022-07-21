@@ -20,12 +20,12 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GetTest do
       assert {:ok, ^result} = Get.all_by(user_id)
     end
 
-    test "other test", %{result: result} do
+    test "when user id is invalid, returns empty list", %{result: result} do
       [%{user_id: user_id} | _t] = result
 
-      value = user_id + 1
+      user_id_invalid = user_id + 1
 
-      assert {:ok, []} = Get.all_by(value)
+      assert {:ok, []} = Get.all_by(user_id_invalid)
     end
   end
 end
