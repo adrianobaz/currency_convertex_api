@@ -125,8 +125,74 @@ defmodule CurrencyConvertexApiWeb.ConversionTransactionsControllerTest do
     end
   end
 
-  describe " show/2" do
-    test "" do
+  describe "GET api/v1/conversion_transactions/:user_id | show/2" do
+    setup %{conn: conn} do
+      user = insert(:user)
+
+      %{id: user_id} = user
+
+      {:ok, token, _claims} = Guardian.encode_and_sign(user)
+
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+      insert_list(3, :conversion_transaction, user_id: user_id)
+
+      %{conn: conn, user: user}
+    end
+
+    test "when user id is valid", %{
+      conn: conn,
+      user: %{id: user_id} = _user
+    } do
+      assert [
+               %{
+                 "conversion_rate" => "5.52",
+                 "created_at" => "2022-06-16T03:29:03Z",
+                 "destiny_currency" => symbol_one,
+                 "origin_currency" => @origin_currency,
+                 "origin_value" => "48.67",
+                 "user_id" => ^user_id
+               },
+               %{
+                 "conversion_rate" => "141.96",
+                 "created_at" => "2022-06-16T03:29:03Z",
+                 "destiny_currency" => symbol_two,
+                 "origin_currency" => @origin_currency,
+                 "origin_value" => "48.67",
+                 "user_id" => ^user_id
+               },
+               %{
+                 "conversion_rate" => "1.05",
+                 "created_at" => "2022-06-16T03:29:03Z",
+                 "destiny_currency" => symbol_three,
+                 "origin_currency" => @origin_currency,
+                 "origin_value" => "48.67",
+                 "user_id" => ^user_id
+               }
+             ] =
+               conn
+               |> get(Routes.conversion_transactions_path(conn, :show, user_id))
+               |> json_response(:ok)
+
+      assert (symbol_one && symbol_two && symbol_three) in ~w(USD BRL JPY)
+    end
+
+    test "when valid user id but no exists", %{conn: conn} do
+      user_id_valid = Ecto.UUID.generate()
+
+      assert [] =
+               conn
+               |> get(Routes.conversion_transactions_path(conn, :show, user_id_valid))
+               |> json_response(:ok)
+    end
+
+    test "when invalid user id is passed", %{conn: conn} do
+      Enum.each(["invalid_id", 121_353], fn invalid_user_id ->
+        assert %{"message" => "Invalid UUID"} =
+                 conn
+                 |> get(Routes.conversion_transactions_path(conn, :show, invalid_user_id))
+                 |> json_response(:bad_request)
+      end)
     end
   end
 end

@@ -11,7 +11,7 @@ defmodule CurrencyConvertexApi.ConversionTransactions.CreateTest do
     setup do
       %{id: user_id} = insert(:user)
 
-      valid_params = build(:conversion_transaction_params, %{user_id: user_id})
+      valid_params = build(:conversion_transaction_params, user_id: user_id)
 
       invalid_params =
         build(:conversion_transaction_params, %{

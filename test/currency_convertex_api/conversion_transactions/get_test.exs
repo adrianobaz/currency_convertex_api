@@ -7,19 +7,21 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GetTest do
 
   describe "all_by/1" do
     setup do
-      %{id: user_id} = insert(:user)
+      user = insert(:user)
 
-      result = insert_list(3, :conversion_transaction, %{user_id: user_id})
+      %{id: user_id} = user
 
-      %{result: result}
+      conversion_transactions = insert_list(3, :conversion_transaction, user_id: user_id)
+
+      %{conversion_transactions: conversion_transactions, user: user}
     end
 
-    test "when user id exists, returns conversion transactios successfully", %{
-      result: result
+    test "when user id exists", %{
+      conversion_transactions: conversion_transactions,
+      user: %{id: user_id} = _user
     } do
-      [%{user_id: user_id} | _t] = result
-
-      assert {:ok, ^result} = Get.all_by(user_id)
+      assert {:ok, result} = Get.all_by(user_id)
+      assert conversion_transactions == result
     end
 
     test "when user id is invalid, returns empty list" do
