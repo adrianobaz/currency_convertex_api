@@ -10,7 +10,7 @@ defmodule CurrencyConvertexApi.ConversionTransactionTest do
     setup do
       %{id: user_id} = insert(:user)
 
-      params = build(:conversion_transaction_params, %{user_id: user_id})
+      params = build(:conversion_transaction_params, user_id: user_id)
 
       invalid_params =
         build(:conversion_transaction_params, %{destiny_currency: "ABCD", origin_value: 0})
@@ -18,18 +18,15 @@ defmodule CurrencyConvertexApi.ConversionTransactionTest do
       %{params: params, invalid_params: invalid_params}
     end
 
-    test "when all params are valid, returns a valid changeset", %{params: params} do
-      %{user_id: user_id} = params
-      response = ConversionTransaction.changeset(params)
-
+    test "when all params are valid", %{
+      params: %{user_id: user_id} = params
+    } do
       assert %Changeset{
                changes: %{
-                 user_id: ^user_id,
-                 origin_currency: "EUR",
-                 destiny_currency: "USD"
+                 user_id: ^user_id
                },
                valid?: true
-             } = response
+             } = ConversionTransaction.changeset(params)
     end
 
     test "when there are some error, returns an invalid changeset", %{

@@ -21,5 +21,5 @@ defmodule CurrencyConvertexApiWeb.Auth.Guardian do
     end
   end
 
-  def authenticate(_), do: {:erro, Error.build(:bad_request, "Invalid or missing params!")}
+  def authenticate(_), do: {:error, Error.build(:bad_request, "Invalid or missing params!")}
 end

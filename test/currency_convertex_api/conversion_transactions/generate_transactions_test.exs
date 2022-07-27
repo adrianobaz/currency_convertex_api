@@ -20,7 +20,7 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
     } do
       list_string = ~w(BRL JPY USD)
 
-      params = build(:request_exchange_params, %{user_id: user_id})
+      params = build(:request_exchange_params, user_id: user_id)
 
       expect(Client, :get_exchange_rates, fn symbols_string ->
         assert symbols_string == "USD,BRL,JPY"
@@ -76,7 +76,7 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
     end
 
     test "when timestamp argument is invalid, return an error", %{user_id: user_id} do
-      params = build(:request_exchange_params, %{user_id: user_id})
+      params = build(:request_exchange_params, user_id: user_id)
 
       expect(Client, :get_exchange_rates, fn symbols_string ->
         assert symbols_string == "USD,BRL,JPY"

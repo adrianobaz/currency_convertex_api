@@ -8,7 +8,7 @@ defmodule CurrencyConvertexApi.Users.CreateTest do
 
   describe "call/1" do
     test "when all params are valid" do
-      params = build(:user_params)
+      params = params_for(:user)
 
       assert {:ok,
               %User{
@@ -18,7 +18,7 @@ defmodule CurrencyConvertexApi.Users.CreateTest do
     end
 
     test "when there are some invalid params" do
-      params = build(:user_params, %{name: "Fo", password: 12})
+      params = params_for(:user, name: "Fo", password: 12)
 
       expected_result = %{name: ["should be at least 3 character(s)"], password: ["is invalid"]}
 

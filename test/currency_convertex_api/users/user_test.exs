@@ -8,14 +8,14 @@ defmodule CurrencyConvertexApi.UserTest do
 
   describe "changeset/2" do
     test "when all params are valid, returns a valid changeset" do
-      params = build(:user_params)
+      params = params_for(:user)
 
       assert %Changeset{valid?: true, changes: %{name: "Pedro Miguel", password: "123456"}} =
                User.changeset(params)
     end
 
     test "when there are some invalid params, returns an invalid changeset" do
-      params = build(:user_params, %{password: "123", name: "Fo"})
+      params = params_for(:user, password: "123", name: "Fo")
 
       expected_response = %{
         name: ["should be at least 3 character(s)"],

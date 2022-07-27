@@ -16,8 +16,8 @@ defmodule CurrencyConvertexApi.Factory do
   def conversion_transaction_params_factory do
     %{
       origin_currency: "EUR",
-      origin_value: Decimal.new("38.89"),
-      destiny_currency: "USD",
+      origin_value: Decimal.new("48.674545"),
+      destiny_currency: sequence(:destiny_currency, ["BRL", "JPY", "USD"]),
       conversion_rate: Decimal.new("1.06"),
       created_at: "2022-06-24T02:09:06Z"
     }
@@ -27,9 +27,14 @@ defmodule CurrencyConvertexApi.Factory do
     %ConversionTransaction{
       user_id: Ecto.UUID.generate(),
       origin_currency: "EUR",
-      origin_value: Decimal.new("38.89"),
-      destiny_currency: "USD",
-      conversion_rate: Decimal.new("1.06"),
+      origin_value: Decimal.new("48.67"),
+      destiny_currency: sequence(:destiny_currency, ["BRL", "JPY", "USD"]),
+      conversion_rate:
+        sequence(:conversion_rate, [
+          Decimal.new("5.52"),
+          Decimal.new("141.96"),
+          Decimal.new("1.05")
+        ]),
       created_at: ~U[2022-06-16 03:29:03Z]
     }
   end
@@ -50,16 +55,10 @@ defmodule CurrencyConvertexApi.Factory do
 
   def user_factory do
     %User{
-      id: Ecto.UUID.generate(),
       name: "Pedro Miguel",
-      password: "123456"
-    }
-  end
-
-  def user_params_factory do
-    %{
-      name: "Pedro Miguel",
-      password: "123456"
+      password: "123456",
+      password_hash:
+        "$argon2id$v=19$m=65536,t=8,p=2$/H0USPUg4OUlX+gCur1JxA$jyBkqaBT8jzKdjMQs7PUBj4+ILDhnQTIMfdU18M7bHw"
     }
   end
 end
