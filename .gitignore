@@ -30,4 +30,3 @@ currency_convertex_api-*.tar
 
 # NOT TRACK ENVS!
 .env
-

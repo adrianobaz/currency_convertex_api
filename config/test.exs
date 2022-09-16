@@ -31,3 +31,5 @@ config :phoenix, :plug_init_mode, :runtime
 
 # Mock adapter for all clients
 config :tesla, adapter: Tesla.Mock
+
+config :currency_convertex_api, Oban, testing: :inline

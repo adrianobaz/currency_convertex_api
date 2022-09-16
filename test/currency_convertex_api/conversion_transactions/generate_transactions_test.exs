@@ -8,6 +8,9 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
   alias CurrencyConvertexApi.ExchangeRates.Client
   alias CurrencyConvertexApi.Error
 
+  @origin_value Decimal.new("48.67")
+  @origin_currency "EUR"
+
   describe "call/1" do
     setup do
       %{id: user_id} = insert(:user)
@@ -18,8 +21,6 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
     test "when there are valid params, return with success conversion transactions list", %{
       user_id: user_id
     } do
-      list_string = ~w(BRL JPY USD)
-
       params = build(:request_exchange_params, user_id: user_id)
 
       expect(Client, :get_exchange_rates, fn symbols_string ->
@@ -27,21 +28,28 @@ defmodule CurrencyConvertexApi.ConversionTransactions.GenerateTransactionsTest d
         {:ok, build(:exchange_rate)}
       end)
 
-      assert {:ok, [h | t]} = Generate.call(params)
+      assert {:ok, [head | tail]} = Generate.call(params)
 
-      ([h] ++ t)
-      |> Enum.zip(list_string)
-      |> Enum.each(fn {conversion_transaction, symbol} ->
-        %{
-          user_id: user_id,
-          origin_currency: origin_currency,
-          destiny_currency: destiny_currency
-        } = conversion_transaction
-
-        assert user_id == user_id
-        assert origin_currency == "EUR"
-        assert destiny_currency == symbol
-      end)
+      assert [
+               %{
+                 destiny_currency: "BRL",
+                 origin_currency: @origin_currency,
+                 origin_value: @origin_value,
+                 user_id: ^user_id
+               },
+               %{
+                 destiny_currency: "JPY",
+                 origin_currency: @origin_currency,
+                 origin_value: @origin_value,
+                 user_id: ^user_id
+               },
+               %{
+                 destiny_currency: "USD",
+                 origin_currency: @origin_currency,
+                 origin_value: @origin_value,
+                 user_id: ^user_id
+               }
+             ] = [head] ++ tail
     end
 
     test "when there is passed user id that NOT exists, return not found" do

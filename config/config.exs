@@ -25,6 +25,11 @@ config :currency_convertex_api, CurrencyConvertexApiWeb.Auth.Pipeline,
   module: CurrencyConvertexApiWeb.Auth.Guardian,
   error_handler: CurrencyConvertexApiWeb.Auth.ErrorHandler
 
+config :currency_convertex_api, Oban,
+  repo: CurrencyConvertexApi.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [default: 10]
+
 # Configures the endpoint
 config :currency_convertex_api, CurrencyConvertexApiWeb.Endpoint,
   url: [host: "localhost"],
